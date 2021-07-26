@@ -39,6 +39,16 @@ export class AppComponent {
     this.getAllPeople();
   }
 
+  //registration
+  emailReg: string = "";
+  nameReg: string = "";
+  passwordReg: string = "";
+  reenterPassword: string = "";
+
+  showRegForm: boolean = false;
+  regErr: boolean = false;
+  title;
+
   showCreateConversation: boolean = false;
   showMembersScreen: boolean = false;
 
@@ -46,8 +56,13 @@ export class AppComponent {
   showPeople: boolean = false;
   isInit: boolean = false;
 
+  //Login
   email: string = "";
   password: string = "";
+
+  showLoginForm: boolean = false;
+  loginErr: boolean = false;
+
   conTitle: string = "";
   membersOfACon;
   selectedCon;
@@ -66,8 +81,52 @@ export class AppComponent {
     }
   }
 
+  displayRegForm() {
+    this.showRegForm = true;
+  }
+
+  displayLoginForm() {
+    this.showRegForm = false;
+  }
+
+  register() {
+    if (this.nameReg != "" && this.emailReg != "" && this.passwordReg != "" && this.reenterPassword != "") {
+      this.regErr = false;
+      if (this.passwordReg == this.reenterPassword) {
+        let data = {
+          name: this.nameReg,
+          email: this.emailReg,
+          password: this.passwordReg
+        }
+
+        this.peopleService.register(data).subscribe({
+          next: (response: any) => {
+            console.log(response);
+            this.showRegForm = false;
+            this.showLoginForm = true;
+            this.nameReg = "";
+            this.emailReg = "";
+            this.passwordReg = "";
+            this.reenterPassword = "";
+            alert("Account Was Created Successfully! Login With Your Email")
+          },
+          error: (err: any) => {
+            console.log(err.error.message);
+            alert(err.error.message)
+          }
+        })
+      } else {
+        alert("Password Confirmation Failed");
+      }
+    } else {
+      this.regErr = true;
+    }
+
+  }
+
   login() {
     if (this.email != "" && this.password != "") {
+      this.loginErr = false;
       let data = {
         email: this.email,
         password: this.password
@@ -78,6 +137,7 @@ export class AppComponent {
           this.isLoggedIn = true;
           this.localStorageService.setData(response);
           this.localStorageService.setToken(response.token);
+          console.log(this.localStorageService.getData().person_id);
           this.ngOnInit();
         },
         error: (err: any) => {
@@ -85,7 +145,7 @@ export class AppComponent {
         }
       })
     } else {
-      console.log("please enter");
+      this.loginErr = true;
     }
   }
 
@@ -231,6 +291,7 @@ export class AppComponent {
       },
       error: (err: any) => {
         console.log(err.error.message);
+        alert(err.error.message)
       }
     })
   }

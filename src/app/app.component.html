@@ -6,11 +6,41 @@
 
 <!-- Toolbar -->
 <div class="content" role="main">
-  <div class="login" *ngIf="!isLoggedIn">
+
+  <div class="login" *ngIf="showRegForm">
+    <h2 class="title">O2O Registration</h2><br>
+    <form id="login-form">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <p style="float: right; color: red;" *ngIf="regErr">Please Fill All Required Fields</p>
+        <input type="text" class="form-control" id="text" name="name" [(ngModel)]="nameReg" placeholder="Enter Name" />
+        <br>
+        <label for="email">Email
+        </label>
+        <input type="text" class="form-control" id="text" name="email" [(ngModel)]="emailReg"
+          placeholder="Enter Email" />
+        <br>
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="text" name="password" [(ngModel)]="passwordReg"
+          placeholder="Password" /> <br>
+        <label for="re-password">Re-enter Password</label>
+        <input type="password" class="form-control" id="text" name="re-password" [(ngModel)]="reenterPassword"
+          placeholder="Re-enter Password" />
+      </div>
+      <button type="button" class="btn btn-primary" (click)="register()">Submit</button>
+      <a [routerLink]="" (click)="displayLoginForm()" style="float: right;">Already Have an Account</a>
+    </form>
+  </div>
+
+
+  <div class="login" *ngIf="!isLoggedIn && !showRegForm">
     <h2 class="title">Login to Chat</h2><br>
     <form id="login-form">
       <div class="form-group">
-        <label for="username">Email</label>
+        <label for="username">Email </label>
+        <p style="float: right; color: red;" *ngIf="loginErr">Please Fill All Required
+          Fields
+        </p>
         <input type="text" class="form-control" id="text" name="username" [(ngModel)]="email" placeholder="Email" />
         <br>
         <label for="password">Password</label>
@@ -18,18 +48,20 @@
           placeholder="Password" />
       </div>
       <button type="button" class="btn btn-primary" (click)="login()">Submit</button>
+      <a [routerLink]="" (click)="displayRegForm()" style="float: right;">Create an Account</a>
     </form>
   </div>
 
   <div class="container" *ngIf="isLoggedIn">
     <h3 class=" text-center">O2OConversations</h3>
+    <br><br><br>
     <div class="messaging">
       <div class="inbox_msg">
 
         <div class="inbox_people">
           <div class="headind_srch">
             <div class="channel_heading">
-              <h4>Created</h4>
+              <h4>Created By Me</h4>
             </div>
             <button type="button" style="float: right;" class="btn btn-secondary" (click)="showCreateConForm()">Create
               New</button>
@@ -44,7 +76,7 @@
                       <div class="btn-group" role="group" style="float: right;" aria-label="Basic example">
                         <button type="button" class="btn btn-primary btn-sm" (click)="messagesClick(conversation)">View
                           Messages</button>
-                        <button type="button" class="btn btn-light btn-sm"
+                        <button type="button" class="btn btn-info btn-sm"
                           (click)="membersClick(conversation)">More</button>
                       </div>
                     </h5>
@@ -56,7 +88,7 @@
             </div>
             <div class="headind_srch">
               <div class="channel_heading">
-                <h4>Member</h4>
+                <h4>My Conversations</h4>
               </div>
             </div>
             <div class="chat_list" *ngFor="let conversation of conversationsOfMember">
