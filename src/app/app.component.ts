@@ -4,7 +4,7 @@ import { LocalStorageServiceService } from './services/local-storage-service.ser
 import { ConversationServiceService } from './services/conversation-service.service';
 import { PeopleServiceService } from './services/people-service.service';
 import { MessageServiceService } from './services/message-service.service';
-import { Observable, timer } from 'rxjs';
+import { timer } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -262,12 +262,9 @@ export class AppComponent {
     this.getMessagesByConversation();
 
     const ticker = timer(0, 5000);
-    // ticker.subscribe(() => {
-    //   this.getMessagesByConversation();
-    //   console.log("got");
-    // });
-
-
+    ticker.subscribe(() => {
+      this.getMessagesByConversation();
+    });
   }
 
   getMessagesByConversation() {
@@ -371,12 +368,5 @@ export class AppComponent {
       return 'mesgs_with_people';
     }
     return 'mesgs_without_people';
-  }
-
-  highlightSelected(conversation_id) {
-    if (conversation_id == this.selectedCon.id) {
-      return 'chat_list_selected';
-    }
-    return 'chat_list';
   }
 }
