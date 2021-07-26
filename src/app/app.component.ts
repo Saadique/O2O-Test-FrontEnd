@@ -142,6 +142,7 @@ export class AppComponent {
         },
         error: (err: any) => {
           console.log(err.error.message);
+          alert(err.error.message);
         }
       })
     } else {
